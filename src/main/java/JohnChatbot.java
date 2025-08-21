@@ -20,7 +20,7 @@ public class JohnChatbot {
                     System.out.println("Here are the outstanding tasks in your list: \n");
                     for(int i = 0; i < userInputs.size(); i++) {
                         System.out.println((i + 1) + "." +
-                                            userInputs.get(i).getDescription() + "\n");
+                                            userInputs.get(i).getDescription());
                     }
                     System.out.println(lineBreak);
                     break;
@@ -71,7 +71,7 @@ public class JohnChatbot {
         if (isDeadlineCommand(userInput)) {
             Deadline deadlineAdded = new Deadline(userInput);
             userInputs.add(deadlineAdded);
-            System.out.println(lineBreak + "Got it. I've added: \n" + deadlineAdded.getDescription() +
+            System.out.println(lineBreak + "Got it. I've added:\n" + deadlineAdded.getDescription() +
                     "\n Now you have " + userInputs.size() + " tasks in the list."
                     + lineBreak);
         } else if (isUnmarkCommand(userInput)) {
@@ -83,13 +83,13 @@ public class JohnChatbot {
         } else if (isEventCommand(userInput)) {
             Event eventAdded = new Event(userInput);
             userInputs.add(eventAdded);
-            System.out.println(lineBreak + "Got it. I've added: \n" + eventAdded.getDescription() +
+            System.out.println(lineBreak + "Got it. I've added:\n" + eventAdded.getDescription() +
                     "\n Now you have " + userInputs.size() + " tasks in the list."
                     + lineBreak);
         } else if (isTodoCommand(userInput)) {
             Todo todoAdded = new Todo(userInput);
             userInputs.add(todoAdded);
-            System.out.println(lineBreak + "Got it. I've added: \n" + todoAdded.getDescription() +
+            System.out.println(lineBreak + "Got it. I've added:\n" + todoAdded.getDescription() +
                     "\n Now you have " + userInputs.size() + " tasks in the list."
                     + lineBreak);
         } else if (isMarkCommand(userInput)) {
