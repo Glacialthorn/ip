@@ -1,10 +1,10 @@
 public class Event extends Task {
 
-    public Event(String description) {
+    public Event(String description) throws JohnChatbotException {
         super(description);
         int fromIndex = description.indexOf("/from");
         int toIndex = description.indexOf("/to");
-        String eventName = description.substring(6, fromIndex).trim();
+        String eventName = description.substring(Math.min(description.length(), 6), fromIndex).trim();
         String startTime = description.substring(fromIndex + 5, toIndex).trim();
         String endTime = description.substring(toIndex + 3).trim();
         String finalDesc = eventName + " (from: " + startTime + " to: " + endTime + ")";

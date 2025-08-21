@@ -1,5 +1,5 @@
 public class Deadline extends Task {
-    public Deadline(String description) {
+    public Deadline(String description) throws JohnChatbotException {
         super(description);
         int byIndex = description.indexOf("/by");
         String deadline = description.substring(byIndex + 3).trim();
