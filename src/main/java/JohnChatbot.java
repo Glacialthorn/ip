@@ -11,28 +11,28 @@ public class JohnChatbot {
         while(true) {
             String userInput = scanner.nextLine();
             try {
-                // Check for commands that don't need a task to be added
-                if (userInput.equals("bye")) {
-                    System.out.println(lineBreak + "Bye. Hope to see you again soon!" + lineBreak);
-                    break;
-                } else if (userInput.equals("list")) {
-                    System.out.println(lineBreak);
-                    System.out.println("Here are the outstanding tasks in your list: \n");
-                    for(int i = 0; i < userInputs.size(); i++) {
-                        System.out.println((i + 1) + "." +
-                                getStatus(userInputs.get(i)) +
-                                userInputs.get(i).getDescription());
-                    }
-                    System.out.println(lineBreak);
-                } else {
-                    checkCommand(userInput, userInputs);
+                switch (userInput) {
+                    case "bye":
+                        System.out.println(lineBreak + "Bye. Hope to see you again soon!" + lineBreak);
+                        break;
+                    case "list":
+                        System.out.println(lineBreak);
+                        System.out.println("Here are the outstanding tasks in your list: \n");
+                        for(int i = 0; i < userInputs.size(); i++) {
+                            System.out.println((i + 1) + "." +
+                                    userInputs.get(i).getDescription());
+                        }
+                        System.out.println(lineBreak);
+                        break;
+                    default:
+                        checkCommand(userInput, userInputs);
+                        break;
                 }
             } catch (JohnChatbotException e) {
                 // Catch and handle all custom exceptions from checkCommand
                 System.out.println(lineBreak + e.getMessage() + lineBreak);
             }
         }
-        scanner.close();
     }
 
     public static String getStatus(Task task) {
@@ -61,6 +61,10 @@ public class JohnChatbot {
         return input.startsWith("event");
     }
 
+    public static boolean isDeleteCommand(String input) {
+        return input.startsWith("delete");
+    }
+
     public static void checkCommand(String userInput, List<Task> userInputs) throws JohnChatbotException {
         String lineBreak = "\n____________________________________________________________\n";
 
@@ -74,7 +78,8 @@ public class JohnChatbot {
             userInputs.add(deadlineAdded);
             System.out.println(lineBreak + "Got it. I've added:\n" + deadlineAdded.getDescription() +
                     "\nNow you have " + userInputs.size() + " tasks in the list." + lineBreak);
-        } else if (isUnmarkCommand(userInput)) {
+        }
+        else if (isUnmarkCommand(userInput)) {
             try {
                 int taskIndex = Integer.parseInt(userInput.substring(7).trim()) - 1;
                 if (taskIndex < 0 || taskIndex >= userInputs.size()) {
@@ -87,7 +92,8 @@ public class JohnChatbot {
             } catch (NumberFormatException e) {
                 throw new JohnChatbotException("The unmark command requires a valid task number after 'unmark'.");
             }
-        } else if (isEventCommand(userInput)) {
+        }
+        else if (isEventCommand(userInput)) {
             String[] parts = userInput.split(" ", 2);
             if (parts.length < 2 || parts[1].trim().isEmpty()) {
                 throw new JohnChatbotException("The description of an event cannot be empty.");
@@ -97,7 +103,8 @@ public class JohnChatbot {
             userInputs.add(eventAdded);
             System.out.println(lineBreak + "Got it. I've added:\n" + eventAdded.getDescription() +
                     "\nNow you have " + userInputs.size() + " tasks in the list." + lineBreak);
-        } else if (isTodoCommand(userInput)) {
+        }
+        else if (isTodoCommand(userInput)) {
             String[] parts = userInput.split(" ", 2);
             if (parts.length < 2 || parts[1].trim().isEmpty()) {
                 throw new JohnChatbotException("The description of a todo cannot be empty.");
@@ -106,7 +113,8 @@ public class JohnChatbot {
             userInputs.add(todoAdded);
             System.out.println(lineBreak + "Got it. I've added:\n" + todoAdded.getDescription() +
                     "\nNow you have " + userInputs.size() + " tasks in the list." + lineBreak);
-        } else if (isMarkCommand(userInput)) {
+        }
+        else if (isMarkCommand(userInput)) {
             try {
                 int taskIndex = Integer.parseInt(userInput.substring(5).trim()) - 1;
                 if (taskIndex < 0 || taskIndex >= userInputs.size()) {
@@ -114,12 +122,22 @@ public class JohnChatbot {
                 }
                 userInputs.get(taskIndex).markAsDone();
                 System.out.println(lineBreak + "Nice! I've marked this task as done: \n" +
-                        getStatus(userInputs.get(taskIndex)) +
                         userInputs.get(taskIndex).getDescription() + lineBreak);
             } catch (NumberFormatException e) {
                 throw new JohnChatbotException("The mark command requires a valid task number after 'mark'.");
             }
-        } else {
+        }
+        else if (isDeleteCommand(userInput)) {
+            int deleteTarget = Integer.parseInt(userInput.substring(6).trim()) - 1;
+            if (deleteTarget < 0 || deleteTarget >= userInputs.size()) {
+                throw new JohnChatbotException("The task number is out of bounds. Please enter a number from 1 to " + userInputs.size() + ".");
+            }
+            Task removedTask = userInputs.get(deleteTarget);
+            System.out.println(lineBreak + "Noted. I've removed this task: \n" +
+                    removedTask.getDescription() + lineBreak);
+            userInputs.remove(deleteTarget);
+        }
+        else {
             throw new JohnChatbotException("No idea what you mean");
         }
     }
