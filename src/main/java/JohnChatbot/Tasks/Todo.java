@@ -1,11 +1,14 @@
+package JohnChatbot.Tasks;
+
+import JohnChatbot.JohnChatbotException;
+
 public class Todo extends Task {
-    public Todo(String description) throws JohnChatbotException{
+    public Todo(String description) throws JohnChatbotException {
         super(description);
     }
 
-
     @Override
-    public String getDescription() {
+    public String toString() {
         if (this.isDone) {
             String output = "[T] [X] " + this.description;
             return output;

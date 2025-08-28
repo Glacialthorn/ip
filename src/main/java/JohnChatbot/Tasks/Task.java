@@ -1,4 +1,10 @@
-public class Task {
+package JohnChatbot.Tasks;
+
+import JohnChatbot.JohnChatbotException;
+
+import java.io.Serializable;
+
+public class Task implements Serializable {
     protected String description;
     protected boolean isDone;
 
@@ -27,8 +33,9 @@ public class Task {
     public void markAsUndone() {
         isDone = false;
     }
-    
-    public String convertToString() {
+
+    @Override
+    public String toString() {
         return "T | " + (isDone ? "1" : "0") + " | " + this.description;
     }
 }

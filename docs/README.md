@@ -1,4 +1,4 @@
-# JohnChatbot User Guide
+# JohnChatbot.JohnChatbot User Guide
 
 // Update the title above to match the actual product name
 
