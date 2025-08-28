@@ -8,12 +8,12 @@ public class JohnChatbot {
     public static void main(String[] args) {
         List<Task> userInputs = new ArrayList<>();
         String lineBreak = "\n____________________________________________________________\n";
-        ChatbotStorage chatbotStorage = new ChatbotStorage(FILE_PATH);
+        Storage storage = new Storage(FILE_PATH);
 
         System.out.println(lineBreak + "Hello! I'm John Chatbot!\nWhat can I do for you?" + lineBreak);
 
         try {
-            userInputs = chatbotStorage.load();
+            userInputs = storage.load();
         } catch (IOException e) {
             System.out.println("Error loading tasks: " + e.getMessage());
             userInputs = new ArrayList<>();
@@ -38,7 +38,7 @@ public class JohnChatbot {
                         break;
                     default:
                         checkCommand(userInput, userInputs);
-                        chatbotStorage.save(userInputs);
+                        storage.save(userInputs);
                         break;
                 }
             } catch (JohnChatbotException e) {
@@ -56,6 +56,10 @@ public class JohnChatbot {
         } else {
             return "[ ] ";
         }
+    }
+
+    public static void greet() {
+        Ui.printSection("Hello! I'm John Chatbot!\nWhat can I do for you?");
     }
 
     public static boolean isMarkCommand(String input) {
