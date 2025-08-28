@@ -17,7 +17,7 @@ public class Storage {
                 if (obj instanceof SaveData) {
                     return (SaveData) obj;
                 } else {
-                    System.out.println("Warning: TaskList in file is of the wrong type. Creating a new one.");
+                    System.out.println("Warning: TaskList is of the wrong type. Creating...");
                 }
 
             } catch (IOException | ClassNotFoundException e) {
