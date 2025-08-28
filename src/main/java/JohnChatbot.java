@@ -4,7 +4,8 @@ import java.util.Scanner;
 import java.io.IOException;
 
 public class JohnChatbot {
-    public static final String FILE_PATH = "./data/storage.txt";
+    
+
     public static void main(String[] args) {
         List<Task> userInputs = new ArrayList<>();
         String lineBreak = "\n____________________________________________________________\n";
