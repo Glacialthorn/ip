@@ -1,12 +1,24 @@
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
+import java.io.IOException;
 
 public class JohnChatbot {
+    public static final String FILE_PATH = "./data/storage.txt";
     public static void main(String[] args) {
         List<Task> userInputs = new ArrayList<>();
         String lineBreak = "\n____________________________________________________________\n";
+        ChatbotStorage chatbotStorage = new ChatbotStorage(FILE_PATH);
+
         System.out.println(lineBreak + "Hello! I'm John Chatbot!\nWhat can I do for you?" + lineBreak);
+
+        try {
+            userInputs = chatbotStorage.load();
+        } catch (IOException e) {
+            System.out.println("Error loading tasks: " + e.getMessage());
+            userInputs = new ArrayList<>();
+        }
+
         Scanner scanner = new Scanner(System.in);
         while(true) {
             String userInput = scanner.nextLine();
@@ -26,11 +38,14 @@ public class JohnChatbot {
                         break;
                     default:
                         checkCommand(userInput, userInputs);
+                        chatbotStorage.save(userInputs);
                         break;
                 }
             } catch (JohnChatbotException e) {
                 // Catch and handle all custom exceptions from checkCommand
                 System.out.println(lineBreak + e.getMessage() + lineBreak);
+            } catch (IOException e) {
+                System.out.println(lineBreak + "An error occurred while saving: " + e.getMessage() + lineBreak);
             }
         }
     }
@@ -128,6 +143,7 @@ public class JohnChatbot {
             }
         }
         else if (isDeleteCommand(userInput)) {
+            //TODO: add min check for edgecase of invalid input being too small
             int deleteTarget = Integer.parseInt(userInput.substring(6).trim()) - 1;
             if (deleteTarget < 0 || deleteTarget >= userInputs.size()) {
                 throw new JohnChatbotException("The task number is out of bounds. Please enter a number from 1 to " + userInputs.size() + ".");

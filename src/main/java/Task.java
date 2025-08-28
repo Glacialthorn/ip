@@ -28,5 +28,7 @@ public class Task {
         isDone = false;
     }
     
-
+    public String convertToString() {
+        return "T | " + (isDone ? "1" : "0") + " | " + this.description;
+    }
 }
