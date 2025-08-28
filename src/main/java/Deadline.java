@@ -17,4 +17,8 @@ public class Deadline extends Task {
             return output;
         }
     }
+    @Override
+    public String convertToString() {
+        return "D | " + (isDone ? "1" : "0") + description;
+    }
 }

@@ -1,5 +1,4 @@
 public class Event extends Task {
-
     public Event(String description) throws JohnChatbotException {
         super(description);
         int fromIndex = description.indexOf("/from");
@@ -20,5 +19,10 @@ public class Event extends Task {
             String output = "[E] [ ] " + this.description;
             return output;
         }
+    }
+
+    @Override
+    public String convertToString() {
+        return "E | " + (isDone ? "1" : "0") + description;
     }
 }
