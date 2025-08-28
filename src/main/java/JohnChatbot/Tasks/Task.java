@@ -1,3 +1,7 @@
+package JohnChatbot.Tasks;
+
+import JohnChatbot.JohnChatbotException;
+
 public class Task {
     protected String description;
     protected boolean isDone;
@@ -27,8 +31,9 @@ public class Task {
     public void markAsUndone() {
         isDone = false;
     }
-    
-    public String convertToString() {
+
+    @Override
+    public String toString() {
         return "T | " + (isDone ? "1" : "0") + " | " + this.description;
     }
 }
