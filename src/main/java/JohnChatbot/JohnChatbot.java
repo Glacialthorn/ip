@@ -19,14 +19,26 @@ public class JohnChatbot {
         exit();
     }
 
+    /**
+     * Loads save file if available, otherwise creates a new one.
+     */
     private static void loadSave() {
         taskList = Storage.getOrCreateSave(saveFileName);
     }
 
+    /**
+     * Outputs greeting message on bot startup.
+     */
     public static void greet() {
         Ui.printSection("Hello! I'm John Chatbot!\nWhat can I do for you?");
     }
 
+    /**
+     * Constantly checks for inputs that are commands from user.
+     * @throws IllegalArgumentException if the input does not contain a valid command word.
+     * @see #printTasks() #markTask(string) #unmarkTask(string) #addDeadline(string)
+     * #addEvent(string) #addTodo(string)
+     */
     private static void run() {
         java.util.Scanner sc = new java.util.Scanner(System.in);
         boolean ongoing = true;
@@ -71,16 +83,27 @@ public class JohnChatbot {
         }
     }
 
+    /**
+     * Updates the stored save file to match the current one's contents.
+     */
     public static void updateSaveDataFile() {
         Storage.saveToFile(taskList, saveFileName);
     }
 
+    /**
+     * Adds a task to the list of tasks and updates the user when it does.
+     *
+     * @param task The task to be added.
+     */
     public static void addTask(Task task) {
         taskList.getTaskList().add(task);
         updateSaveDataFile();
         Ui.printSection("Added task to the list: " + task);
     }
 
+    /**
+     * Print the list of tasks that the user has added to their list.
+     */
     public static void printTasks() {
         if (taskList.getTaskList().isEmpty()) {
             Ui.printSection("You have nothing to do!");
@@ -89,6 +112,10 @@ public class JohnChatbot {
         }
     }
 
+    /**
+     * Marks the chosen task as complete.
+     * @param line The input command from the user.
+     */
     private static void markTask(String line) {
         try {
             String flag = "mark";
@@ -106,6 +133,11 @@ public class JohnChatbot {
         }
     }
 
+
+    /**
+     * Marks the chosen task as incomplete.
+     * @param line The input command from the user.
+     */
     private static void unmarkTask(String line) {
         try {
             String flag = "unmark";
@@ -123,6 +155,10 @@ public class JohnChatbot {
         }
     }
 
+    /**
+     * Adds a Todo Task to the list.
+     * @param line The input command from the user.
+     */
     private static void addTodo(String line) {
         try {
             String flag = "todo";
@@ -137,6 +173,10 @@ public class JohnChatbot {
         }
     }
 
+    /**
+     * Adds a Deadline Task to the list.
+     * @param line The input command from the user.
+     */
     private static void addDeadline(String line) {
         String flag = "deadline";
         String byFlag = "/by";
@@ -161,6 +201,10 @@ public class JohnChatbot {
         }
     }
 
+    /**
+     * Adds an Event Task to the list.
+     * @param line The input command from the user.
+     */
     private static void addEvent(String line) {
         String flag = "event";
         String fromFlag = "/from";
@@ -190,6 +234,10 @@ public class JohnChatbot {
         }
     }
 
+    /**
+     * Removes the chosen task from the list based on index provided.
+     * @param input The input command from the user.
+     */
     public static void deleteTask(String input) {
         try {
             String flag = "delete";
@@ -208,6 +256,9 @@ public class JohnChatbot {
         }
     }
 
+    /**
+     * Closes the chatbot and ends program.
+     */
     public static void exit() {
         Ui.printSection("bye bye!");
     }
