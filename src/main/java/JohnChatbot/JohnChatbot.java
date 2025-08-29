@@ -62,12 +62,37 @@ public class JohnChatbot {
                 case "delete":
                     deleteTask(input);
                     break;
+                case "find":
+                    findTask(input);
+                    break;
                 default:
                     throw new IllegalArgumentException("Invalid command :(");
                 }
             } catch (IllegalArgumentException e) {
                 Ui.printSection((e.toString()));
             }
+        }
+    }
+
+    public static void findTask(String input) {
+        TaskList matchingTasks = new TaskList();
+        String flag = "find";
+        String description = Parser.getFlag(input, flag);
+        if (description.isEmpty()) {
+            throw new IllegalArgumentException("Add description after 'find' to search for tasks with the word!");
+        }
+
+        for (int i = 0; i < taskList.getTaskList().size(); i++) {
+            if (taskList.getTaskList().get(i).toString().contains(description)) {
+                matchingTasks.getTaskList().add(taskList.getTaskList().get(i));
+            }
+        }
+
+        if (matchingTasks.getTaskList().isEmpty()) {
+            Ui.printSection("No tasks match your search!");
+        } else {
+            Ui.printList(matchingTasks.getTaskList(),
+                    "Here are the tasks that match your search of " + description);
         }
     }
 
@@ -201,7 +226,7 @@ public class JohnChatbot {
             int indexToRemove = Integer.parseInt(index) - 1;
             Task taskToRemove = taskList.getTaskList().get(indexToRemove);
             taskList.getTaskList().remove(indexToRemove);
-            Ui.printSection("JohnChatbot.Tasks.Task has been removed: " + taskToRemove);
+            Ui.printSection("Task has been removed: " + taskToRemove);
             updateSaveDataFile();
         } catch (IndexOutOfBoundsException e) {
             Ui.printSection("The index provided is out of bounds");
