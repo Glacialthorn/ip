@@ -152,7 +152,7 @@ public class JohnChatbot {
             Task taskToMark = taskList.getTaskList().get(Integer.parseInt(index) - 1);
             taskToMark.markAsDone();
             //print feedback so user can see
-            Ui.printSection("JohnChatbot.Tasks.Task has been marked as complete: " + taskToMark.getDescription());
+            Ui.printSection("Task has been marked as complete: " + taskToMark.getDescription());
         } catch (IndexOutOfBoundsException e) {
             Ui.printSection("The index provided is out of bounds");
         }
