@@ -8,13 +8,22 @@ public class Ui {
     public static void printLineBreak() {
         System.out.println(lineBreak);
     }
-
+    /**
+     * Prints message sandwiched between 2 lines.
+     *
+     * @param msg The message to be printed.
+     */
     public static void printSection(String msg) {
         printLineBreak();
         System.out.println(msg);
         printLineBreak();
     }
 
+    /**
+     * Prints each element in the provided list.
+     *
+     * @param list The list to be printed.
+     */
     public static void printListInSection(List<?> list) {
         printLineBreak();
         for (int i = 0; i < list.size(); i++) {
@@ -23,20 +32,21 @@ public class Ui {
         printLineBreak();
     }
 
+    /**
+     * Prints each element in the provided list, with a message before the list.
+     *
+     * @param list The list to be printed.
+     */
     public static void printListInSection(List<?> list, String msg) {
         printLineBreak();
         printList(list, msg);
         printLineBreak();
     }
 
-    public static void printList(List<?> list, String msg) {
+    private static void printList(List<?> list, String msg) {
         System.out.println(msg);
         for (int i = 0; i < list.size(); i++) {
             System.out.println((i + 1) + "." + list.get(i).toString());
         }
-    }
-
-    public static void showLoadingError(Exception e) {
-        System.out.println("An error has occurred while loading tasks: " + e.getMessage());
     }
 }

@@ -8,6 +8,12 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 
 public class Storage {
+    /**
+     * Retrieves the save file if available and returns it, otherwise create a new one.
+     *
+     * @param filename Name of file to be created/found.
+     * @return The result of the subtraction.
+     */
     public static TaskList getOrCreateSave(String filename) {
         File file = new File(filename);
 
@@ -33,6 +39,13 @@ public class Storage {
         return newTaskList;
     }
 
+    /**
+     * Update stored TaskList data in filename to follow new one.
+     *
+     * @param taskList The new TaskList data to save.
+     * @param filename The name of the stored TaskList file.
+     * @return The result of the subtraction.
+     */
     public static void saveToFile(TaskList taskList, String filename) {
         try {
             File file = new File(filename);

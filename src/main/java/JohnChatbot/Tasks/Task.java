@@ -17,7 +17,11 @@ public class Task implements Serializable {
     }
 
 
-
+    /**
+     * Provides description of Task
+     *
+     * @return The description of the Task.
+     */
     public String getDescription() {
         return this.description;
     }
@@ -34,6 +38,7 @@ public class Task implements Serializable {
         isDone = false;
     }
 
+    
     @Override
     public String toString() {
         return "T | " + (isDone ? "1" : "0") + " | " + this.description;

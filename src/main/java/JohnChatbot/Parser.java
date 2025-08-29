@@ -23,6 +23,13 @@ public class Parser {
         return LocalDateTime.parse(str, formatter);
     }
 
+    /**
+     * Returns input with the flag removed
+     *
+     * @param input The input string which contains: flag + rest of command
+     * @param flag The string to search for and remove.
+     * @return The input string with the flag removed.
+     */
     public static String getFlag(String input, String flag) {
         if (input.contains(flag)) {
             return input.split(flag, 2)[1].split("/", 2)[0].trim();
