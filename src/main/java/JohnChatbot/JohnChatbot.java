@@ -8,6 +8,9 @@ import JohnChatbot.Tasks.Todo;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 
+/**
+ * Chatbot Logic
+ */
 public class JohnChatbot {
     private static TaskList taskList;
     private static final String saveFileName = "JohnChatbotSave.ser";
@@ -86,6 +89,10 @@ public class JohnChatbot {
         }
     }
 
+    /**
+     * Searches for task
+     * @param input String to be searched for
+     */
     public static void findTask(String input) {
         TaskList matchingTasks = new TaskList();
         String flag = "find";
@@ -279,6 +286,13 @@ public class JohnChatbot {
         } catch (IndexOutOfBoundsException e) {
             Ui.printSection("The index provided is out of bounds");
         }
+    }
+
+    /**
+     * Generates a response for the user's chat message.
+     */
+    public String getResponse(String input) {
+        return "JohnChatbot heard: " + input;
     }
 
     /**
