@@ -127,10 +127,11 @@ public class JohnChatbot {
      *
      * @param task The task to be added.
      */
-    public static void addTask(Task task) {
+    public static String addTask(Task task) {
         taskList.getTaskList().add(task);
         updateSaveDataFile();
-        Ui.printSection("Added task to the list: " + task);
+        //Ui.printSection("Added task to the list: " + task);
+        return "Added task to the list: " + task;
     }
 
     /**
@@ -191,7 +192,7 @@ public class JohnChatbot {
      * Adds a Todo Task to the list.
      * @param line The input command from the user.
      */
-    private static void addTodo(String line) {
+    private static String addTodo(String line) {
         try {
             String flag = "todo";
             String description = Parser.getFlag(line, flag);
@@ -199,9 +200,11 @@ public class JohnChatbot {
                 throw new IllegalArgumentException("The description of a todo cannot be empty!");
             }
             Task task = new Todo(description);
-            addTask(task);
+            return addTask(task);
+
         } catch (JohnChatbotException e) {
             Ui.printSection("Something went wrong: " + e.getMessage());
+            return "Something went wrong: " + e.getMessage();
         }
     }
 
@@ -288,11 +291,45 @@ public class JohnChatbot {
         }
     }
 
-    /**
-     * Generates a response for the user's chat message.
-     */
     public String getResponse(String input) {
-        return "JohnChatbot heard: " + input;
+        String cmd = input.split(" ", 2)[0].toLowerCase();
+        try {
+            switch (cmd) {
+            case "":
+                break;
+            case "bye":
+                break;
+            case "list":
+                printTasks();
+                break;
+            case "mark":
+                markTask(input);
+                break;
+            case "unmark":
+                unmarkTask(input);
+                break;
+            case "deadline":
+                addDeadline(input);
+                break;
+            case "event":
+                addEvent(input);
+                break;
+            case "todo":
+                addTodo(input);
+                break;
+            case "delete":
+                deleteTask(input);
+                break;
+            case "find":
+                findTask(input);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid command :(");
+            }
+        } catch (IllegalArgumentException e) {
+            Ui.printSection((e.toString()));
+        }
+        return "Invalid command";
     }
 
     /**
