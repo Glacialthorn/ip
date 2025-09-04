@@ -1,52 +1,32 @@
 package JohnChatbot;
 
 import java.util.List;
+import JohnChatbot.Tasks.Task;
 
 public class Ui {
-    static final String lineBreak = "\n____________________________________________________________\n";
+    private static final String line = "------------------------------------";
 
-    public static void printLineBreak() {
-        System.out.println(lineBreak);
-    }
-    /**
-     * Prints message sandwiched between 2 lines.
-     *
-     * @param msg The message to be printed.
-     */
-    public static void printSection(String msg) {
-        printLineBreak();
-        System.out.println(msg);
-        printLineBreak();
+    public static String getSection(String msg) {
+        return line + "\n" + msg + "\n" + line;
     }
 
-    /**
-     * Prints each element in the provided list.
-     *
-     * @param list The list to be printed.
-     */
-    public static void printListInSection(List<?> list) {
-        printLineBreak();
+    public static String getListInSection(List<Task> list, String msg) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(line).append("\n").append(msg).append("\n");
         for (int i = 0; i < list.size(); i++) {
-            System.out.println((i + 1) + "." + list.get(i).toString());
+            sb.append((i + 1)).append(". ").append(list.get(i).toString()).append("\n");
         }
-        printLineBreak();
+        sb.append(line);
+        return sb.toString();
     }
 
-    /**
-     * Prints each element in the provided list, with a message before the list.
-     *
-     * @param list The list to be printed.
-     */
-    public static void printListInSection(List<?> list, String msg) {
-        printLineBreak();
-        printList(list, msg);
-        printLineBreak();
-    }
-
-    private static void printList(List<?> list, String msg) {
-        System.out.println(msg);
-        for (int i = 0; i < list.size(); i++) {
-            System.out.println((i + 1) + "." + list.get(i).toString());
+    public static String getStringListInSection(List<String> list, String msg) {
+        StringBuilder sb = new StringBuilder();
+        sb.append(line).append("\n").append(msg).append("\n");
+        for (String item : list) {
+            sb.append(item).append("\n");
         }
+        sb.append(line);
+        return sb.toString();
     }
 }

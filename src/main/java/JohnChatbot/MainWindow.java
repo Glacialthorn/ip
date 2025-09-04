@@ -2,11 +2,13 @@ package JohnChatbot;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+
 /**
  * Controller for the main GUI.
  */
@@ -28,11 +30,17 @@ public class MainWindow extends AnchorPane {
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
+        // The greeting logic is removed from here
     }
 
-    /** Injects the JohnChatbot instance */
+    /** Injects the JohnChatbot instance and displays the greeting */
     public void setJohnChatbot(JohnChatbot d) {
         johnChatbot = d;
+        // The greeting logic is now here, after the object is injected
+        String greeting = johnChatbot.greet();
+        dialogContainer.getChildren().add(
+                DialogBox.getJohnChatbotDialog(greeting, johnChatbotImage)
+        );
     }
 
     /**

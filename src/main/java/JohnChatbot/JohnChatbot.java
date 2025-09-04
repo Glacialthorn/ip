@@ -15,11 +15,8 @@ public class JohnChatbot {
     private static TaskList taskList;
     private static final String saveFileName = "JohnChatbotSave.ser";
 
-    public static void main(String[] args) {
+    public JohnChatbot() {
         loadSave();
-        greet();
-        run();
-        exit();
     }
 
     /**
@@ -32,68 +29,64 @@ public class JohnChatbot {
     /**
      * Outputs greeting message on bot startup.
      */
-    public static void greet() {
-        Ui.printSection("Hello! I'm John Chatbot!\nWhat can I do for you?");
+    public String greet() {
+        return "Hello! I'm John Chatbot!\nWhat can I do for you?";
     }
 
     /**
      * Constantly checks for inputs that are commands from user.
      * @throws IllegalArgumentException if the input does not contain a valid command word.
-     * @see #printTasks() #markTask(string) #unmarkTask(string) #addDeadline(string)
-     * #addEvent(string) #addTodo(string)
      */
-    private static void run() {
-        java.util.Scanner sc = new java.util.Scanner(System.in);
-        boolean ongoing = true;
+    public String getResponse(String input) {
+        String cmd = input.split(" ", 2)[0].toLowerCase();
+        String response = "";
 
-        while (ongoing) {
-            String input = sc.nextLine().trim();
-            String cmd = input.split(" ", 2)[0].toLowerCase();
-            try {
-                switch (cmd) {
-                case "":
-                    break;
-                case "bye":
-                    ongoing = false;
-                    break;
-                case "list":
-                    printTasks();
-                    break;
-                case "mark":
-                    markTask(input);
-                    break;
-                case "unmark":
-                    unmarkTask(input);
-                    break;
-                case "deadline":
-                    addDeadline(input);
-                    break;
-                case "event":
-                    addEvent(input);
-                    break;
-                case "todo":
-                    addTodo(input);
-                    break;
-                case "delete":
-                    deleteTask(input);
-                    break;
-                case "find":
-                    findTask(input);
-                    break;
-                default:
-                    throw new IllegalArgumentException("Invalid command :(");
-                }
-            } catch (IllegalArgumentException e) {
-                Ui.printSection((e.toString()));
+        try {
+            switch (cmd) {
+            case "":
+                break;
+            case "bye":
+                response = exit();
+                break;
+            case "list":
+                response = printTasks();
+                break;
+            case "mark":
+                response = markTask(input);
+                break;
+            case "unmark":
+                response = unmarkTask(input);
+                break;
+            case "deadline":
+                response = addDeadline(input);
+                break;
+            case "event":
+                response = addEvent(input);
+                break;
+            case "todo":
+                response = addTodo(input);
+                break;
+            case "delete":
+                response = deleteTask(input);
+                break;
+            case "find":
+                response = findTask(input);
+                break;
+            default:
+                response = "Invalid command :(";
+                break;
             }
+        } catch (IllegalArgumentException e) {
+            response = "Error: " + e.getMessage();
         }
+        return Ui.getSection(response);
     }
 
     /**
-     * Searches for task
+     * Searches for tasks
      * @param input String to be searched for
      */
-    public static void findTask(String input) {
+    public String findTask(String input) {
         TaskList matchingTasks = new TaskList();
         String flag = "find";
         String description = Parser.getFlag(input, flag);
@@ -108,9 +101,9 @@ public class JohnChatbot {
         }
 
         if (matchingTasks.getTaskList().isEmpty()) {
-            Ui.printSection("No tasks match your search!");
+            return "No tasks match your search!";
         } else {
-            Ui.printListInSection(matchingTasks.getTaskList(),
+            return Ui.getListInSection(matchingTasks.getTaskList(),
                     "Here are the tasks that match your search of " + description);
         }
     }
@@ -127,21 +120,20 @@ public class JohnChatbot {
      *
      * @param task The task to be added.
      */
-    public static String addTask(Task task) {
+    public String addTask(Task task) {
         taskList.getTaskList().add(task);
         updateSaveDataFile();
-        //Ui.printSection("Added task to the list: " + task);
         return "Added task to the list: " + task;
     }
 
     /**
      * Print the list of tasks that the user has added to their list.
      */
-    public static void printTasks() {
+    public String printTasks() {
         if (taskList.getTaskList().isEmpty()) {
-            Ui.printSection("You have nothing to do!");
+            return "You have nothing to do!";
         } else {
-            Ui.printListInSection(taskList.getTaskList(), "Here are the outstanding tasks in your list: ");
+            return Ui.getListInSection(taskList.getTaskList(), "Here are the outstanding tasks in your list: ");
         }
     }
 
@@ -149,7 +141,7 @@ public class JohnChatbot {
      * Marks the chosen task as complete.
      * @param line The input command from the user.
      */
-    private static void markTask(String line) {
+    private String markTask(String line) {
         try {
             String flag = "mark";
             String index = Parser.getFlag(line, flag);
@@ -159,10 +151,11 @@ public class JohnChatbot {
             //setting task in list as done
             Task taskToMark = taskList.getTaskList().get(Integer.parseInt(index) - 1);
             taskToMark.markAsDone();
-            //print feedback so user can see
-            Ui.printSection("Task has been marked as complete: " + taskToMark.getDescription());
+            updateSaveDataFile();
+            //return feedback so user can see
+            return "Task has been marked as complete: " + taskToMark.getDescription();
         } catch (IndexOutOfBoundsException e) {
-            Ui.printSection("The index provided is out of bounds");
+            return "The index provided is out of bounds";
         }
     }
 
@@ -171,7 +164,7 @@ public class JohnChatbot {
      * Marks the chosen task as incomplete.
      * @param line The input command from the user.
      */
-    private static void unmarkTask(String line) {
+    private String unmarkTask(String line) {
         try {
             String flag = "unmark";
             String index = Parser.getFlag(line, flag);
@@ -181,10 +174,11 @@ public class JohnChatbot {
             //setting task in list as done
             Task taskToMark = taskList.getTaskList().get(Integer.parseInt(index) - 1);
             taskToMark.markAsUndone();
-            //print feedback so user can see
-            Ui.printSection("JohnChatbot.Tasks.Task has been marked as incomplete: " + taskToMark.getDescription());
+            updateSaveDataFile();
+            //return feedback so user can see
+            return "Task has been marked as incomplete: " + taskToMark.getDescription();
         } catch (IndexOutOfBoundsException e) {
-            Ui.printSection("The index provided is out of bounds");
+            return "The index provided is out of bounds";
         }
     }
 
@@ -192,7 +186,7 @@ public class JohnChatbot {
      * Adds a Todo Task to the list.
      * @param line The input command from the user.
      */
-    private static String addTodo(String line) {
+    private String addTodo(String line) {
         try {
             String flag = "todo";
             String description = Parser.getFlag(line, flag);
@@ -201,10 +195,8 @@ public class JohnChatbot {
             }
             Task task = new Todo(description);
             return addTask(task);
-
         } catch (JohnChatbotException e) {
-            Ui.printSection("Something went wrong: " + e.getMessage());
-            return "Something went wrong: " + e.getMessage();
+            return Ui.getSection(e.getMessage());
         }
     }
 
@@ -212,7 +204,7 @@ public class JohnChatbot {
      * Adds a Deadline Task to the list.
      * @param line The input command from the user.
      */
-    private static void addDeadline(String line) {
+    private String addDeadline(String line) {
         String flag = "deadline";
         String byFlag = "/by";
         String description = Parser.getFlag(line, flag);
@@ -223,16 +215,15 @@ public class JohnChatbot {
         if (by.isEmpty()) {
             throw new IllegalArgumentException("The " + byFlag + " for a deadline cannot be empty!");
         }
-
         try {
             LocalDateTime byDate = Parser.parseDateTime(by);
             Task task = new Deadline(description, byDate);
-            addTask(task);
+            return addTask(task);
         } catch (DateTimeParseException e) {
-            Ui.printListInSection(Parser.formatList,
-                            "Wrong date time format: " + e + "\nAccepted date formats: ");
+            return Ui.getStringListInSection(Parser.formatList,
+                    "Wrong date time format: " + e + "\nAccepted date formats: ");
         } catch (JohnChatbotException e) {
-            Ui.printSection("Something went wrong: " + e.getMessage());
+            return Ui.getSection(e.getMessage());
         }
     }
 
@@ -240,7 +231,7 @@ public class JohnChatbot {
      * Adds an Event Task to the list.
      * @param line The input command from the user.
      */
-    private static void addEvent(String line) {
+    private String addEvent(String line) {
         String flag = "event";
         String fromFlag = "/from";
         String toFlag = "/to";
@@ -260,12 +251,12 @@ public class JohnChatbot {
             LocalDateTime fromDate = Parser.parseDateTime(from);
             LocalDateTime toDate = Parser.parseDateTime(to);
             Task task = new Event(description, fromDate, toDate);
-            addTask(task);
+            return addTask(task);
         } catch (DateTimeParseException e) {
             String msg = "Wrong date time format!: " + e + "/nAccepted date formats: ";
-            Ui.printListInSection(Parser.formatList, msg);
+            return Ui.getStringListInSection(Parser.formatList, msg);
         } catch (JohnChatbotException e) {
-            Ui.printSection("Something went wrong: " + e.getMessage());
+            return Ui.getSection(e.getMessage());
         }
     }
 
@@ -273,7 +264,7 @@ public class JohnChatbot {
      * Removes the chosen task from the list based on index provided.
      * @param input The input command from the user.
      */
-    public static void deleteTask(String input) {
+    public String deleteTask(String input) {
         try {
             String flag = "delete";
             String index = Parser.getFlag(input, flag);
@@ -284,58 +275,17 @@ public class JohnChatbot {
             int indexToRemove = Integer.parseInt(index) - 1;
             Task taskToRemove = taskList.getTaskList().get(indexToRemove);
             taskList.getTaskList().remove(indexToRemove);
-            Ui.printSection("Task has been removed: " + taskToRemove);
             updateSaveDataFile();
+            return "Task has been removed: " + taskToRemove;
         } catch (IndexOutOfBoundsException e) {
-            Ui.printSection("The index provided is out of bounds");
+            return "The index provided is out of bounds";
         }
-    }
-
-    public String getResponse(String input) {
-        String cmd = input.split(" ", 2)[0].toLowerCase();
-        try {
-            switch (cmd) {
-            case "":
-                break;
-            case "bye":
-                break;
-            case "list":
-                printTasks();
-                break;
-            case "mark":
-                markTask(input);
-                break;
-            case "unmark":
-                unmarkTask(input);
-                break;
-            case "deadline":
-                addDeadline(input);
-                break;
-            case "event":
-                addEvent(input);
-                break;
-            case "todo":
-                addTodo(input);
-                break;
-            case "delete":
-                deleteTask(input);
-                break;
-            case "find":
-                findTask(input);
-                break;
-            default:
-                throw new IllegalArgumentException("Invalid command :(");
-            }
-        } catch (IllegalArgumentException e) {
-            Ui.printSection((e.toString()));
-        }
-        return "Invalid command";
     }
 
     /**
      * Closes the chatbot and ends program.
      */
-    public static void exit() {
-        Ui.printSection("bye bye!");
+    public String exit() {
+        return "bye bye!";
     }
 }
