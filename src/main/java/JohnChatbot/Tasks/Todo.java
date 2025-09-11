@@ -10,10 +10,10 @@ public class Todo extends Task {
     @Override
     public String toString() {
         if (this.isDone) {
-            String output = "[T] [X] " + this.description;
+            String output = "[T] [X] " + this.description + " | tag: " + this.tag;
             return output;
         } else {
-            String output = "[T] [ ] " + this.description;
+            String output = "[T] [ ] " + this.description + " | tag: " + this.tag;
             return output;
         }
     }

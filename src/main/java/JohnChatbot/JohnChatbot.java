@@ -7,6 +7,7 @@ import JohnChatbot.Tasks.Todo;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
+import java.util.Arrays;
 
 /**
  * Chatbot Logic
@@ -72,6 +73,9 @@ public class JohnChatbot {
             case "find":
                 response = findTask(input);
                 break;
+            case "tag":
+                response = setTag(input);
+                break;
             default:
                 response = "Invalid command :(";
                 break;
@@ -80,6 +84,38 @@ public class JohnChatbot {
             response = "Error: " + e.getMessage();
         }
         return Ui.getSection(response);
+    }
+
+    /**
+     * Tags Task that was input.
+     * @param input The remaining command made of 2 parts: [Task name] + [Tag]
+     */
+    public String setTag(String input) {
+        String flag = "tag";
+        String inputRemovedFlag = Parser.getFlag(input, flag).trim();
+
+        if (inputRemovedFlag.isEmpty()) {
+            throw new IllegalArgumentException("Usage: tag \"[task name]\" [tag name]!");
+        }
+
+        String[] parts = inputRemovedFlag.split("\\s+");
+        if (parts.length < 2) {
+            throw new IllegalArgumentException("Please provide both a task name and a tag name.");
+        }
+
+        String tagName = parts[parts.length - 1];
+
+        // Everything before last word = task name
+        String taskName = String.join(" ", Arrays.copyOf(parts, parts.length - 1));
+
+        for (int i = 0; i < taskList.getTaskList().size(); i++) {
+            if (taskList.getTaskList().get(i).toString().contains(taskName)) {
+                taskList.getTaskList().get(i).setTag(tagName);
+                return Ui.getSection("Set the tag of " + taskName + " to be : " + tagName);
+            }
+        }
+
+        return Ui.getSection("Could not find a task with the name of: " + taskName);
     }
 
     /**

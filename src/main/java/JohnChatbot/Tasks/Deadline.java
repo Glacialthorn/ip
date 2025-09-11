@@ -17,10 +17,12 @@ public class Deadline extends Task {
     @Override
     public String toString() {
         if (this.isDone) {
-            String output = "[D] [X] " + this.description + " " + Parser.dateTimeToString(deadline);
+            String output = "[D] [X] " + this.description + " "
+                                        + Parser.dateTimeToString(deadline) + " | tag: " + this.tag;
             return output;
         } else {
-            String output = "[D] [ ] " + this.description + " " + Parser.dateTimeToString(deadline);
+            String output = "[D] [ ] " + this.description + " "
+                                        + Parser.dateTimeToString(deadline) + " | tag: " + this.tag;
             return output;
         }
     }

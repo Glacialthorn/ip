@@ -18,10 +18,10 @@ public class Event extends Task {
     @Override
     public String toString() {
         if (this.isDone) {
-            String output = "[E] [X] " + this.description;
+            String output = "[E] [X] " + this.description + " | tag: " + this.tag;
             return output;
         } else {
-            String output = "[E] [ ] " + this.description;
+            String output = "[E] [ ] " + this.description + " | tag: " + this.tag;
             return output;
         }
     }

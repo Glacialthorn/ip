@@ -7,6 +7,7 @@ import java.io.Serializable;
 public class Task implements Serializable {
     protected String description;
     protected boolean isDone;
+    protected String tag;
 
     public Task(String description) throws JohnChatbotException {
         if (description.equals("")) {
@@ -14,6 +15,7 @@ public class Task implements Serializable {
         }
         this.description = description;
         this.isDone = false;
+        this.tag = "[none]";
     }
 
 
@@ -38,9 +40,12 @@ public class Task implements Serializable {
         isDone = false;
     }
 
-    
+    public void setTag(String tagInput) {
+        this.tag = tagInput;
+    }
+
     @Override
     public String toString() {
-        return "T | " + (isDone ? "1" : "0") + " | " + this.description;
+        return "T | " + (isDone ? "1" : "0") + " | " + this.description + " | tag: " + this.tag;
     }
 }
