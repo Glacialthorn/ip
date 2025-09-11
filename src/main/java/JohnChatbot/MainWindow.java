@@ -30,13 +30,11 @@ public class MainWindow extends AnchorPane {
     @FXML
     public void initialize() {
         scrollPane.vvalueProperty().bind(dialogContainer.heightProperty());
-        // The greeting logic is removed from here
     }
 
     /** Injects the JohnChatbot instance and displays the greeting */
     public void setJohnChatbot(JohnChatbot d) {
         johnChatbot = d;
-        // The greeting logic is now here, after the object is injected
         String greeting = johnChatbot.greet();
         dialogContainer.getChildren().add(
                 DialogBox.getJohnChatbotDialog(greeting, johnChatbotImage)

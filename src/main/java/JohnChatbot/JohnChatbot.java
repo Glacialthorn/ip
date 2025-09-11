@@ -38,6 +38,8 @@ public class JohnChatbot {
      * @throws IllegalArgumentException if the input does not contain a valid command word.
      */
     public String getResponse(String input) {
+        assert taskList != null;
+
         String cmd = input.split(" ", 2)[0].toLowerCase();
         String response = "";
 
