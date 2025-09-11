@@ -44,7 +44,6 @@ public class Storage {
      *
      * @param taskList The new TaskList data to save.
      * @param filename The name of the stored TaskList file.
-     * @return The result of the subtraction.
      */
     public static void saveToFile(TaskList taskList, String filename) {
         try {
