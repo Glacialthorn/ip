@@ -9,33 +9,44 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeParseException;
 
 /**
- * Chatbot Logic
+ * The main class for the John Chatbot application.
+ * This class handles user input, processes commands, and manages a list of tasks.
  */
 public class JohnChatbot {
     private static TaskList taskList;
     private static final String saveFileName = "JohnChatbotSave.ser";
 
+    /**
+     * Constructs a new JohnChatbot instance and attempts to load tasks from a save file.
+     * If no save file is found, a new, empty task list is created.
+     */
     public JohnChatbot() {
         loadSave();
     }
 
     /**
-     * Loads save file if available, otherwise creates a new one.
+     * Loads the task list from a serialized save file.
+     * If the file does not exist, a new empty task list is initialized.
      */
     private static void loadSave() {
         taskList = Storage.getOrCreateSave(saveFileName);
     }
 
     /**
-     * Outputs greeting message on bot startup.
+     * Generates a greeting message to be displayed at the start of the application.
+     *
+     * @return A string containing the welcome message.
      */
     public String greet() {
         return "Hello! I'm John Chatbot!\nWhat can I do for you?";
     }
 
     /**
-     * Constantly checks for inputs that are commands from user.
-     * @throws IllegalArgumentException if the input does not contain a valid command word.
+     * Processes a user command and returns a response.
+     * This method parses the input, identifies the command, and executes the corresponding logic.
+     *
+     * @param input The raw command string entered by the user.
+     * @return A string containing the chatbot's response to the command.
      */
     public String getResponse(String input) {
         assert taskList != null;
@@ -85,8 +96,11 @@ public class JohnChatbot {
     }
 
     /**
-     * Searches for tasks
-     * @param input String to be searched for
+     * Searches for tasks that contain a specific keyword or phrase.
+     *
+     * @param input The user's input string, including the search keyword.
+     * @return A formatted string listing all matching tasks. Returns a message if no tasks are found.
+     * @throws IllegalArgumentException If the input does not contain a search description.
      */
     public String findTask(String input) {
         TaskList matchingTasks = new TaskList();
@@ -111,16 +125,17 @@ public class JohnChatbot {
     }
 
     /**
-     * Updates the stored save file to match the current one's contents.
+     * Persists the current task list to the save file.
      */
     public static void updateSaveDataFile() {
         Storage.saveToFile(taskList, saveFileName);
     }
 
     /**
-     * Adds a task to the list of tasks and updates the user when it does.
+     * Adds a new task to the task list and updates the save file.
      *
-     * @param task The task to be added.
+     * @param task The task object to be added.
+     * @return A string confirming the addition of the task.
      */
     public String addTask(Task task) {
         taskList.getTaskList().add(task);
@@ -129,7 +144,9 @@ public class JohnChatbot {
     }
 
     /**
-     * Print the list of tasks that the user has added to their list.
+     * Generates a formatted list of all outstanding tasks.
+     *
+     * @return A string containing the numbered list of tasks, or a message if the list is empty.
      */
     public String printTasks() {
         if (taskList.getTaskList().isEmpty()) {
@@ -140,8 +157,12 @@ public class JohnChatbot {
     }
 
     /**
-     * Marks the chosen task as complete.
-     * @param line The input command from the user.
+     * Marks a task as complete based on its index.
+     *
+     * @param line The user's input string, containing the command and task index.
+     * @return A string confirming the task has been marked as complete.
+     * @throws IllegalArgumentException If the index is empty or not a valid number.
+     * @throws IndexOutOfBoundsException If the index is out of the task list's range.
      */
     private String markTask(String line) {
         try {
@@ -150,11 +171,9 @@ public class JohnChatbot {
             if (index.isEmpty()) {
                 throw new IllegalArgumentException("The task index cannot be empty!");
             }
-            //setting task in list as done
             Task taskToMark = taskList.getTaskList().get(Integer.parseInt(index) - 1);
             taskToMark.markAsDone();
             updateSaveDataFile();
-            //return feedback so user can see
             return "Task has been marked as complete: " + taskToMark.getDescription();
         } catch (IndexOutOfBoundsException e) {
             return "The index provided is out of bounds";
@@ -163,8 +182,12 @@ public class JohnChatbot {
 
 
     /**
-     * Marks the chosen task as incomplete.
-     * @param line The input command from the user.
+     * Marks a task as incomplete based on its index.
+     *
+     * @param line The user's input string, containing the command and task index.
+     * @return A string confirming the task has been marked as incomplete.
+     * @throws IllegalArgumentException If the index is empty or not a valid number.
+     * @throws IndexOutOfBoundsException If the index is out of the task list's range.
      */
     private String unmarkTask(String line) {
         try {
@@ -173,11 +196,9 @@ public class JohnChatbot {
             if (index.isEmpty()) {
                 throw new IllegalArgumentException("The task index cannot be empty!");
             }
-            //setting task in list as done
             Task taskToMark = taskList.getTaskList().get(Integer.parseInt(index) - 1);
             taskToMark.markAsUndone();
             updateSaveDataFile();
-            //return feedback so user can see
             return "Task has been marked as incomplete: " + taskToMark.getDescription();
         } catch (IndexOutOfBoundsException e) {
             return "The index provided is out of bounds";
@@ -185,8 +206,12 @@ public class JohnChatbot {
     }
 
     /**
-     * Adds a Todo Task to the list.
-     * @param line The input command from the user.
+     * Creates and adds a new Todo task to the list.
+     *
+     * @param line The user's input string, containing the todo description.
+     * @return A string confirming the addition of the new todo.
+     * @throws IllegalArgumentException If the description is empty.
+     * @throws JohnChatbotException If an error occurs during the task creation.
      */
     private String addTodo(String line) {
         try {
@@ -203,8 +228,13 @@ public class JohnChatbot {
     }
 
     /**
-     * Adds a Deadline Task to the list.
-     * @param line The input command from the user.
+     * Creates and adds a new Deadline task to the list.
+     *
+     * @param line The user's input string, containing the deadline description and due date.
+     * @return A string confirming the addition of the new deadline.
+     * @throws IllegalArgumentException If the description or due date is empty.
+     * @throws DateTimeParseException If the provided date/time string is in an invalid format.
+     * @throws JohnChatbotException If an error occurs during task creation.
      */
     private String addDeadline(String line) {
         String flag = "deadline";
@@ -230,8 +260,13 @@ public class JohnChatbot {
     }
 
     /**
-     * Adds an Event Task to the list.
-     * @param line The input command from the user.
+     * Creates and adds a new Event task to the list.
+     *
+     * @param line The user's input string, including the event description, start time, and end time.
+     * @return A string confirming the addition of the new event.
+     * @throws IllegalArgumentException If the description, start time, or end time is empty.
+     * @throws DateTimeParseException If the provided date/time string is in an invalid format.
+     * @throws JohnChatbotException If an error occurs during task creation.
      */
     private String addEvent(String line) {
         String flag = "event";
@@ -263,8 +298,12 @@ public class JohnChatbot {
     }
 
     /**
-     * Removes the chosen task from the list based on index provided.
-     * @param input The input command from the user.
+     * Deletes a task from the list based on its index.
+     *
+     * @param input The user's input string, including the command and task index.
+     * @return A string confirming the task has been removed.
+     * @throws IllegalArgumentException If the index is empty or not a valid number.
+     * @throws IndexOutOfBoundsException If the index is out of the task list's range.
      */
     public String deleteTask(String input) {
         try {
@@ -285,7 +324,9 @@ public class JohnChatbot {
     }
 
     /**
-     * Closes the chatbot and ends program.
+     * Generates a farewell message to be displayed upon exiting the chatbot.
+     *
+     * @return A string containing the exit message.
      */
     public String exit() {
         return "bye bye!";
