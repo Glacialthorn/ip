@@ -26,7 +26,7 @@ public class Main extends Application {
             stage.setMinWidth(417);
             fxmlLoader.<MainWindow>getController().setJohnChatbot(johnChatbot); //inject the JohnChatbot instance
             stage.show();
-
+            stage.setTitle("John Chatbot");
         } catch (IOException e) {
             e.printStackTrace();
         }
