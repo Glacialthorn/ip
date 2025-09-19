@@ -60,6 +60,7 @@ public class JohnChatbot {
                 break;
             case "bye":
                 response = exit();
+                System.exit(0);
                 break;
             case "list":
                 response = printTasks();
