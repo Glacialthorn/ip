@@ -2,7 +2,7 @@
 
 JohnChatbot is a simple, GUI-based chatbot designed to help you manage your daily tasks. It allows you to create, list, mark, unmark, delete, and find tasks, with all data automatically saved to a file for persistent storage.
 
-!(docs/Ui.png)
+!(Ui.png)
 
 ---
 
